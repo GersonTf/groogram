@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: blazinc
+---
+testFramework: spock
+sourceLanguage: groovy
