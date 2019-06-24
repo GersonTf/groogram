@@ -1,0 +1,282 @@
+= Groogram
+Gerson Cabrera @tf_gerson
+2019-25-06
+:icons: font
+:toc2: left
+:revealjs_theme: sky
+
+¡bots de telegram con groovy!
+//todo poner logo de telegram
+[NOTE.speaker]
+--
+presentarme, trabajo en b2boost, bla bla bla, trabajo con groovy.
+Preguntar si alguien no ha usado telegram y que el objetivo es que cualquier pueda hacer un bot de telegram con estas slides
+--
+
+== Íntroducción
+* Como crear un bot y configurarlo
+* Arquitectura general del bot y comunicación con nuestra aplicación.
+* Ejemplos de código en Groovy.
+* Review de bots varios.
+* Análisis de posibles usos y conclusiones.
+
+[NOTE.speaker]
+--
+Explicación breve de todo lo que vamos a ver en la charla (TODO: revisar esto después de terminar la charla)
+--
+
+=== Un bot es un programa informático que ejecuta tareas repetitivas a través de internet
+
+[NOTE.speaker]
+--
+Para crear bot hay que usar un bot!, esto viene perfecto para ejemplificar cómo son los bots en telegram
+--
+
+=== Crear bots en Telegram
+
+.@BotFather
+image:botfather.jpeg[]
+
+[NOTE.speaker]
+--
+Para crear bot hay que usar un bot!, esto viene perfecto para ejemplificar cómo son los bots en telegram
+--
+
+=== Un bot funciona como un chat cualquiera
+
+//.A chat with father bot
+image::createbot.gif[600,350]
+
+[NOTE.speaker]
+--
+Se puede mandar mensajes al bot, recibirlos etc, no entrar mucho en las configuraciones que se pueden hacer pero acabar comentando la privacidad
+--
+
+=== Cuidado con la privacidad cuando uses bots
+
+image::privacy.jpg[600,350]
+//TODO maybe a meme could be placed here
+
+[NOTE.speaker]
+--
+no hay bots privados, el bot lee todos tus mensajes, atento a si el bot responde sin comandos
+--
+
+=== Arquitectura de un bot
+
+image::arqbot.png[]
+
+[NOTE.speaker]
+--
+El cliente puede ser web, smarthpone, table..., tu servidor tiene un endpoint
+--
+
+=== Conectar el webhook con tu aplicación.
+
+//TODO mejor forma de poner la url y si deberíamos poner la api primero
+[source,http]
+----
+post https://api.telegram.org/bot751728179:AAFJRaz8sUequ_MgDohSUQI12OiXjj23A/setWebhook
+
+body: {"url":"www.urlbase.com"}  
+----
+
+[NOTE.speaker]
+--
+Miren que fácil se conecta!!!, ahora vamos a ver como mandar mensajes al bot
+--
+
+=== Telegram API
+
+//todo, revisar estructura de esta lista
+se puede consultar
+link:https://core.telegram.org/bots/api[aquí]
+
+https://api.telegram.org/bot<token>/METHOD_NAME
+https://api.telegram.org/bot<token>/sendMessage
+//todo molaría una transición aquí
+
+[NOTE.speaker]
+--
+No vamos a revisar toda la api pero revisar logs y método para mandar mensajes 
+--
+
+=== Pero dame código!!!
+
+image::mathfin.gif[]
+
+=== Controller
+[source,java]
+----
+@Controller
+class TelegramController {
+
+    @Inject
+    TelegramHandler telegramHandler
+
+    @Post("/webhook")
+    void webhook(@Body Update update) {
+        telegramHandler.messageReceiver(update?.message?.text?.drop(1), update)
+    }
+}
+----
+//todo tamaño del source
+
+[NOTE.speaker]
+--
+Esta es una aplicación en micronaut, hay que crear un endpoint con el path /webhook y recibe un Update que es la estructura que te manda telegram y veremos más adelante.
+--
+
+=== Update model
+
+[caption="update model: ",link=https://core.telegram.org/bots/api#getting-updates]
+image::updatemodel.png[2000,500]  
+//todo poner la imagen en pantalla completa
+
+[NOTE.speaker]
+--
+Contar la estructura por encima, ver lo que te puede enviar telegram y hacer incapie en como se sacan los datos del mensaje y del usuario que lo ha mandado
+--
+
+=== Telegram handler
+[source,java]
+----
+@Log
+@Singleton
+class TelegramHandler {
+
+    @Inject
+    MessageService messageService
+
+    private static final def commands = ['start', 'help']
+
+    void messageReceiver(String message, Update params) {
+        log.info("message received $message")
+        validateMessage(message)
+        "$message"(params)
+        // invokeMethod(message, params)
+    }
+
+    void validateMessage(String message) {
+        if (!(message in commands)) {
+            throw new ValidationException("the message is not a valid command")
+        }
+    }
+
+    void start(Update params) {
+        String chatID = params?.message?.getChat()?.getId()
+        messageService.sendNotificationToTelegram("HelloWorld", chatID)
+    }
+
+    void help(Update params) {
+        String chatID = params?.message?.getChat()?.getId()
+        messageService.sendNotificationToTelegram("use /start to say hello world!", chatID)
+    }
+}
+----
+//todo tamaño del source
+
+[NOTE.speaker]
+--
+Telegram handler, servicio que recibe el mensaje y lo mapea al método que ejecutará la lógica asociada a ese comando, manda una respuesta a
+--
+
+=== Message Service
+[source,java]
+----
+@Singleton
+class MessageService {
+
+    @Client("https://api.telegram.org/bot848542380:AAEjlY6qaxA0eEFUXoOFDHwAVMI4-91kW28")
+    @Inject
+    RxHttpClient httpClient
+    
+    void sendNotificationToTelegram(String message, String chatId) {
+        httpClient.toBlocking().exchange("/sendMessage?text=$message&chat_id=$chatId")
+    }
+}
+----
+//todo tamaño del source
+
+[NOTE.speaker]
+--
+message service, se encarga de mandar mensajes a telegram. Comentar que el token del bot debería ir en una variable de entorno en una aplicación seria
+--
+
+=== Problemas que me he encontrado
+
+image::hap.gif[]
+
+[NOTE.speaker]
+--
+Vamos a comentar problemas que he sufrido haciendo bots para que ustedes no tengan que quedarse como en el gif
+--
+
+=== Ejemplos de bots interesantes
+
+* allBot
+* transcriber bot
+* spoiler bot
+* cámaras tráfico madrid
+//todo quizás un meme aquí mejor
+
+[NOTE.speaker]
+--
+Vamos a ver varios ejemplos de bots interesantes para hacernos una idea de lo que se puede hacer con bots
+--
+
+=== 1 @transcriber_bot
+
+//todo poner foto mejor
+Este bot está disponible en multitud de idiomas y devuelve una transcripción de un audio que se ha mandado al grupo
+
+[NOTE.speaker]
+--
+Comentar que también se pueden transcribir imágenes, tiene un /donate a su paypal
+--
+
+=== 2 @NoSpoilersBot
+
+//todo poner foto mejor
+Muy útil para poner en grupos y evitar los spoilers, oculta el mensaje para que solo lo lean los que no se vean afectados por el spoiler
+
+[NOTE.speaker]
+--
+comentar que tiene niveles de spoiler, con HUGE hay que hacer 2 clicks por ejemplo
+--
+
+=== 3 @M30Madridbot
+
+Bot hecho por jorge, puedes solicitar que te mande imágenes de las cámaras de tráfico de Madrid.
+//todo poner foto mejor
+
+[NOTE.speaker]
+--
+
+--
+
+=== Conclusiones
+
+* Los bots son de gran utilidad para el desarrollador
+* Configurar la privacidad
+* Hay que tener cuidado con la gestión de errores y la jerarquía
+* Potencial ilimitado
+* El proceso de creción de bots se puede automatizar fácilmente
+
+[NOTE.speaker]
+--
+Si hay tiempo, comentar junto al potencial usos chulos como la integración de microsoft con azure, automatización, ifftt.. etc
+--
+
+=== Agradecimientos y, ¿Preguntas?
+
+image::bot.png[600,350]
+//todo, poner mi github aquí
+
+(poner mi github aquí)
+
+[NOTE.speaker]
+--
+thanks to madrid gug y pura vida software
+--
+

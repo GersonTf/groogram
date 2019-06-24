@@ -13,8 +13,8 @@ class MessageService {
     RxHttpClient httpClient
 
     /**
-     * It sends a message to a telegram bot with a specific chatId
-     * @param message to send
+     * It sends a message to a specific telegram chatId
+     * @param message to send and chatId
      */
     void sendNotificationToTelegram(String message, String chatId) {
         httpClient.toBlocking().exchange("/sendMessage?text=$message&chat_id=$chatId")
