@@ -27,11 +27,11 @@ Preguntar si alguien no ha usado telegram y que el objetivo es que cualquier pue
 <a href="https://core.telegram.org/bots/api">aquí</a></p></div>
 <div class="paragraph"><p><a href="https://api.telegram.org/bot&lt;token&gt;/METHOD_NAME" class="bare">https://api.telegram.org/bot&lt;token&gt;/METHOD_NAME</a>
 <a href="https://api.telegram.org/bot&lt;token&gt;/sendMessage" class="bare">https://api.telegram.org/bot&lt;token&gt;/sendMessage</a></p></div>
-<aside class="notes"><div class="paragraph"><p>No vamos a revisar toda la api pero revisar logs y método para mandar mensajes</p></div></aside></section><section id="_conectar_el_webhook_con_tu_aplicación"><h2>Conectar el webhook con tu aplicación.</h2><pre class="highlight listingblock"><code data-noescape="" class="http language-http">post/get:
+<aside class="notes"><div class="paragraph"><p>No vamos a revisar toda la api pero revisar logs y método para mandar mensajes</p></div></aside></section><section id="_conectar_el_webhook_con_tu_aplicación"><h2>Conectar el webhook con tu aplicación</h2><pre class="highlight listingblock"><code data-noescape="" class="http language-http">post/get:
 https://api.telegram.org/bot751729:AAFJRaz8sUequ/setWebhook
 
 body: {"url":"www.urlbase.com"}</code></pre>
-<aside class="notes"><div class="paragraph"><p>Miren que fácil se conecta!!!, ahora vamos a ver como mandar mensajes al bot</p></div></aside></section><section id="_pero_dame_código"><h2>Pero dame código!!!</h2><div class="imageblock" style=""><img src="mathfin.gif" alt="mathfin" /></div></section><section id="_controller"><h2>Controller</h2><pre class="highlight listingblock"><code data-noescape="" class="groovy language-groovy">@Controller
+<aside class="notes"><div class="paragraph"><p>Miren que fácil se conecta!!!, ahora vamos a ver como mandar mensajes al bot</p></div></aside></section><section id="_pero_dame_código"><h2>¡¡Pero dame código!!!</h2><div class="imageblock" style=""><img src="mathfin.gif" alt="mathfin" /></div></section><section id="_controller"><h2>Controller</h2><pre class="highlight listingblock"><code data-noescape="" class="groovy language-groovy">@Controller
 class TelegramController {
 
     @Inject
@@ -42,7 +42,7 @@ class TelegramController {
         telegramHandler.messageReceiver(update)
     }
 }</code></pre>
-<aside class="notes"><div class="paragraph"><p>Esta es una aplicación en micronaut, hay que crear un endpoint con el path /webhook y recibe un Update que es la estructura que te manda telegram y veremos más adelante.</p></div></aside></section><section id="_update_model"><h2>Update model</h2><div class="imageblock" style=""><a class="image" href="https://core.telegram.org/bots/api#getting-updates"><img src="updatemodel.png" alt="2000" width="500" /></a></div>
+<aside class="notes"><div class="paragraph"><p>Esta es una aplicación en micronaut, hay que crear un endpoint con el path /webhook y recibe un Update que es la estructura que te manda telegram y veremos más adelante.</p></div></aside></section><section id="_update_model"><h2>Update model</h2><div class="imageblock" style=""><a class="image" href="https://core.telegram.org/bots/api#getting-updates"><img src="updatemodel.png" alt="800" width="630" /></a></div>
 <aside class="notes"><div class="paragraph"><p>Contar la estructura por encima, ver lo que te puede enviar telegram y hacer incapie en como se sacan los datos del mensaje y del usuario que lo ha mandado</p></div></aside></section><section id="_telegram_handler"><h2>Telegram handler</h2><pre class="highlight listingblock"><code data-noescape="" class="java language-java">@Log
 @Singleton
 class TelegramHandler {
@@ -88,14 +88,20 @@ class MessageService {
     }
 }</code></pre>
 <aside class="notes"><div class="paragraph"><p>message service, se encarga de mandar mensajes a telegram. Comentar que el token del bot debería ir en una variable de entorno en una aplicación seria</p></div></aside></section><section id="_problemas_que_me_he_encontrado"><h2>Problemas que me he encontrado</h2><div class="imageblock" style=""><img src="hap.gif" alt="hap" /></div>
-<aside class="notes"><div class="paragraph"><p>Vamos a comentar problemas que he sufrido haciendo bots para que ustedes no tengan que quedarse como en el gif.</p></div></aside></section><section id="_problemas_que_me_he_encontrado_2"><div class="olist arabic"><ol class="arabic"><li><p>logs y gestión de errores</p></li><li><p>tienes que hablar al bot para que pueda hablarte</p></li><li><p>jerarquía de bots</p></li><li><p>Tiempo de respuesta de tu servidor</p></li></ol></div>
-<aside class="notes"><div class="paragraph"><p>Vamos a comentar problemas que he sufrido haciendo bots para que ustedes no tengan que quedarse como en el gif.</p></div></aside></section><section id="_ejemplos_de_bots_interesantes"><h2>Ejemplos de bots interesantes</h2><div class="ulist"><ul><li><p>allBot</p></li><li><p>transcriber bot</p></li><li><p>spoiler bot</p></li><li><p>cámaras tráfico madrid</p></li></ul></div>
-<aside class="notes"><div class="paragraph"><p>Vamos a ver varios ejemplos de bots interesantes para hacernos una idea de lo que se puede hacer con bots</p></div></aside></section><section id="_transcriber_bot"><h2>@transcriber_bot</h2><div class="paragraph"><p>Este bot está disponible en multitud de idiomas y devuelve una transcripción de un audio que se ha mandado al grupo</p></div>
-<aside class="notes"><div class="paragraph"><p>Comentar que también se pueden transcribir imágenes, tiene un /donate a su paypal</p></div></aside></section><section id="_nospoilersbot"><h2>@NoSpoilersBot</h2><div class="paragraph"><p>Muy útil para poner en grupos y evitar los spoilers, oculta el mensaje para que solo lo lean los que no se vean afectados por el spoiler</p></div>
-<aside class="notes"><div class="paragraph"><p>comentar que tiene niveles de spoiler, con HUGE hay que hacer 2 clicks por ejemplo</p></div></aside></section><section id="_m30madridbot"><h2>@M30Madridbot</h2><div class="paragraph"><p>Bot hecho por jorge, puedes solicitar que te mande imágenes de las cámaras de tráfico de Madrid.</p></div>
-<aside class="notes"></aside></section><section id="_conclusiones"><h2>Conclusiones</h2><div class="ulist"><ul><li><p>Los bots son de gran utilidad para el desarrollador</p></li><li><p>Configurar la privacidad</p></li><li><p>Hay que tener cuidado con la gestión de errores y la jerarquía</p></li><li><p>Potencial ilimitado</p></li><li><p>El proceso de creación de bots se puede automatizar fácilmente</p></li></ul></div>
+<aside class="notes"><div class="paragraph"><p>Vamos a comentar problemas que he sufrido haciendo bots para que ustedes no tengan que quedarse como en el gif.</p></div></aside></section><section id="_problemas_que_me_he_encontrado_2"><div class="olist arabic"><ol class="arabic"><li><p>Logs y gestión de errores (Telegram reenvía por defecto los mensajes erróneos)</p></li><li><p>Tienes que hablar al bot para que pueda hablarte</p></li><li><p>Jerarquía de bots</p></li><li><p>Tiempo de respuesta de tu servidor</p></li><li><p>Funcionalidades complejas resultan frustrantes para usuarios no técnicos</p></li></ol></div>
+<aside class="notes"><div class="paragraph"><p>Vamos a comentar problemas que he sufrido haciendo bots para que ustedes no tengan que quedarse como en el gif.</p></div></aside></section><section id="_ejemplos_de_uso"><h2>Ejemplos de uso</h2><div class="paragraph"><p>Algunos bots vienen integrados en telegram por defecto, podemos citarlos usando @ como a cualquier otro bot/usuario:</p></div>
+<div class="imageblock" style=""><img src="inline.png" alt="inline" /></div>
+<aside class="notes"><div class="paragraph"><p>Con @ podemos citar a bots y usuarios
+Vamos a ver varios ejemplos de bots interesantes para hacernos una idea de lo que se puede hacer con bots, queries inline y comentar funciones avanzadas</p></div></aside></section><section id="_inline_queries"><h2>Inline queries</h2><div class="imageblock" style=""><img src="inlineyoutube.gif" alt="500" width="400" /></div>
+<aside class="notes"><div class="paragraph"><p>comentar que los updates se pueden recibir de esta manera también y configurar lo que mandamos a telegram</p></div></aside></section><section id="_auto_comandos"><div class="paragraph"><p>Un bot no puede activar comandos pero puede mandar el mensaje con una / como si fuera un link al mismo</p></div>
+<div class="imageblock" style=""><img src="cuestionario.gif" alt="500" width="400" /></div>
+<aside class="notes"><div class="paragraph"><p>comentar que los updates se pueden recibir de esta manera también y configurar lo que mandamos a telegram</p></div></aside></section><section id="_transcriber_bot"><h2>@transcriber_bot</h2><div class="imageblock" style=""><img src="transcriber.png" alt="600" width="500" /></div>
+<aside class="notes"><div class="paragraph"><p>Este bot está disponible en multitud de idiomas y devuelve una transcripción de un audio que se ha mandado al grupo
+Comentar que también se pueden transcribir imágenes, tiene un /donate a su paypal</p></div></aside></section><section id="_nospoilersbot"><h2>@NoSpoilersBot</h2><div class="imageblock" style=""><img src="spoilgif.gif" alt="500" width="460" /></div>
+<aside class="notes"><div class="paragraph"><p>comentar que tiene niveles de spoiler, con HUGE hay que hacer 2 clicks por ejemplo</p></div></aside></section><section id="_m30madridbot"><h2>@M30Madridbot</h2><div class="imageblock" style=""><img src="m30.gif" alt="500" width="400" /></div>
+<aside class="notes"><div class="paragraph"><p>Bot hecho por jorge, puedes solicitar que te mande imágenes de las cámaras de tráfico de Madrid.</p></div></aside></section><section id="_conclusiones"><h2>Conclusiones</h2><div class="ulist"><ul><li><p>Los bots son de gran utilidad para el desarrollador</p></li><li><p>Configurar la privacidad</p></li><li><p>Hay que tener cuidado con la gestión de errores y la jerarquía</p></li><li><p>Potencial ilimitado</p></li><li><p>El proceso de creación de bots se puede automatizar fácilmente</p></li></ul></div>
 <aside class="notes"><div class="paragraph"><p>Si hay tiempo, comentar junto al potencial usos chulos como la integración de microsoft con azure, automatización, ifftt.. etc</p></div></aside></section><section id="_agradecimientos_y_preguntas"><h2>Agradecimientos y, ¿Preguntas?</h2><div class="imageblock" style=""><img src="bot.png" alt="600" width="350" /></div>
-<div class="paragraph"><p>(poner mi github aquí)</p></div>
+<div class="paragraph"><p>Groogram <a href="https://github.com/Blazerg2/groogram">Github repo</a></p></div>
 <aside class="notes"><div class="paragraph"><p>thanks to madrid gug y pura vida software</p></div></aside></section></section></div></div><script src="reveal.js/lib/js/head.min.js"></script><script src="reveal.js/js/reveal.js"></script><script>Array.prototype.slice.call(document.querySelectorAll('.slides section')).forEach(function(slide) {
   if (slide.getAttribute('data-background-color')) return;
   // user needs to explicitly say he wants CSS color to override otherwise we might break custom css or theme (#226)
@@ -122,7 +128,7 @@ Reveal.initialize({
   // Display a presentation progress bar
   progress: true,
   // Display the page number of the current slide
-  slideNumber: false,
+  slideNumber: 'true',
   // Control which views the slide number displays on
   showSlideNumber: 'all',
   // Push each slide change to the browser history

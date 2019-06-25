@@ -1,14 +1,14 @@
 = Groogram
 Gerson Cabrera, desarrollador Groovy en b2boost
 2019-25-06
-:full-width: width='100%'
-:full-width: scaledwidth='100%'
+:revealjs_slideNumber: true
 :icons: font
 :toc2: left
 :revealjs_theme: league
 :source-highlighter: highlightjs
+:revealjs_progress: true
 
-//black,white,league,sky,beige,simple,serif,blood,night,moon,solarized
+//black,white,FAV: league,sky,beige,simple,serif,blood,night,moon,solarized
 ¡bots de telegram con groovy!
 
 image::logo.jpg[200,125]
@@ -82,20 +82,18 @@ El cliente puede ser web, smarthpone, table..., tu servidor tiene un endpoint /w
 
 === Telegram API
 
-//todo, revisar estructura de esta lista
 se puede consultar
 link:https://core.telegram.org/bots/api[aquí]
 
 https://api.telegram.org/bot<token>/METHOD_NAME
 https://api.telegram.org/bot<token>/sendMessage
-//todo molaría una transición aquí
 
 [NOTE.speaker]
 --
 No vamos a revisar toda la api pero revisar logs y método para mandar mensajes 
 --
 
-=== Conectar el webhook con tu aplicación.
+=== Conectar el webhook con tu aplicación
 
 [source,http]
 ----
@@ -110,7 +108,7 @@ body: {"url":"www.urlbase.com"}
 Miren que fácil se conecta!!!, ahora vamos a ver como mandar mensajes al bot
 --
 
-=== Pero dame código!!!
+=== ¡¡Pero dame código!!!
 
 image::mathfin.gif[]
 
@@ -130,7 +128,6 @@ class TelegramController {
     }
 }
 ----
-//todo tamaño del source
 
 [NOTE.speaker]
 --
@@ -140,8 +137,7 @@ Esta es una aplicación en micronaut, hay que crear un endpoint con el path /web
 === Update model
 
 [caption="update model: ",link=https://core.telegram.org/bots/api#getting-updates]
-image::updatemodel.png[2000,500]  
-//todo poner la imagen en pantalla completa
+image::updatemodel.png[800,630]  
 
 [NOTE.speaker]
 --
@@ -206,7 +202,6 @@ class MessageService {
     }
 }
 ----
-//todo tamaño del source
 
 [NOTE.speaker]
 --
@@ -225,43 +220,64 @@ Vamos a comentar problemas que he sufrido haciendo bots para que ustedes no teng
 [%notitle]
 === Problemas que me he encontrado
 
-1. logs y gestión de errores
-2. tienes que hablar al bot para que pueda hablarte
-3. jerarquía de bots
+1. Logs y gestión de errores (Telegram reenvía por defecto los mensajes erróneos)
+2. Tienes que hablar al bot para que pueda hablarte
+3. Jerarquía de bots
 4. Tiempo de respuesta de tu servidor
+5. Funcionalidades complejas resultan frustrantes para usuarios no técnicos
 
 [NOTE.speaker]
 --
 Vamos a comentar problemas que he sufrido haciendo bots para que ustedes no tengan que quedarse como en el gif.
 --
 
-=== Ejemplos de bots interesantes
+=== Ejemplos de uso
 
-* allBot
-* transcriber bot
-* spoiler bot
-* cámaras tráfico madrid
-//todo quizás un meme aquí mejor
+Algunos bots vienen integrados en telegram por defecto, podemos citarlos usando @ como a cualquier otro bot/usuario:
+
+image::inline.png[]
 
 [NOTE.speaker]
 --
-Vamos a ver varios ejemplos de bots interesantes para hacernos una idea de lo que se puede hacer con bots
+Con @ podemos citar a bots y usuarios
+Vamos a ver varios ejemplos de bots interesantes para hacernos una idea de lo que se puede hacer con bots, queries inline y comentar funciones avanzadas
+--
+
+=== Inline queries
+
+image::inlineyoutube.gif[500,400]
+
+[NOTE.speaker]
+--
+comentar que los updates se pueden recibir de esta manera también y configurar lo que mandamos a telegram
+--
+
+[%notitle]
+
+=== auto comandos
+
+Un bot no puede activar comandos pero puede mandar el mensaje con una / como si fuera un link al mismo
+
+image::cuestionario.gif[500,400]
+
+[NOTE.speaker]
+--
+comentar que los updates se pueden recibir de esta manera también y configurar lo que mandamos a telegram
 --
 
 === @transcriber_bot
 
-//todo poner foto mejor
-Este bot está disponible en multitud de idiomas y devuelve una transcripción de un audio que se ha mandado al grupo
+image::transcriber.png[600,500]
 
 [NOTE.speaker]
 --
+Este bot está disponible en multitud de idiomas y devuelve una transcripción de un audio que se ha mandado al grupo
 Comentar que también se pueden transcribir imágenes, tiene un /donate a su paypal
 --
 
 === @NoSpoilersBot
 
-//todo poner foto mejor
-Muy útil para poner en grupos y evitar los spoilers, oculta el mensaje para que solo lo lean los que no se vean afectados por el spoiler
+image::spoilgif.gif[500,460]
 
 [NOTE.speaker]
 --
@@ -270,12 +286,11 @@ comentar que tiene niveles de spoiler, con HUGE hay que hacer 2 clicks por ejemp
 
 === @M30Madridbot
 
-Bot hecho por jorge, puedes solicitar que te mande imágenes de las cámaras de tráfico de Madrid.
-//todo poner foto mejor
+image::m30.gif[500,400]
 
 [NOTE.speaker]
 --
-
+Bot hecho por jorge, puedes solicitar que te mande imágenes de las cámaras de tráfico de Madrid.
 --
 
 === Conclusiones
@@ -294,9 +309,8 @@ Si hay tiempo, comentar junto al potencial usos chulos como la integración de m
 === Agradecimientos y, ¿Preguntas?
 
 image::bot.png[600,350]
-//todo, poner mi github aquí
 
-(poner mi github aquí)
+Groogram link:https://github.com/Blazerg2/groogram[Github repo]
 
 [NOTE.speaker]
 --
