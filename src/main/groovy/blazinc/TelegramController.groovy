@@ -1,7 +1,6 @@
 package blazinc
 
 import blazinc.telegramModel.Update
-import groovy.util.logging.Log
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
@@ -11,7 +10,6 @@ import io.micronaut.http.annotation.Produces
 
 import javax.inject.Inject
 
-@Log
 @Controller
 class TelegramController {
 
@@ -26,6 +24,6 @@ class TelegramController {
 
     @Post("/webhook")
     void webhook(@Body Update update) {
-        telegramHandler.messageReceiver(update?.message?.text?.drop(1), update)
+        telegramHandler.messageReceiver(update)
     }
 }

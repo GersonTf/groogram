@@ -16,7 +16,8 @@ class TelegramHandler {
 
     private static final def commands = ['start', 'help']
 
-    void messageReceiver(String message, Update params) {
+    void messageReceiver(Update params) {
+        String message = params?.message?.text?.drop(1)
         log.info("message received $message")
         validateMessage(message)
         "$message"(params)
