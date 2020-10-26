@@ -22,6 +22,10 @@ class TelegramController {
         "I am alive!!"
     }
 
+    /**
+    * This endpoint will be the one that receive the messages from your bot trhough the webhook that you will be configured: 
+    * https://core.telegram.org/bots/api#setwebhook (the url param that you have to send must point to this endpoint)
+    **/
     @Post("/webhook")
     void webhook(@Body Update update) {
         telegramHandler.messageReceiver(update)
