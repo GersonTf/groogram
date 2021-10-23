@@ -1,0 +1,13 @@
+services:
+  api:
+    image: okteto.dev/api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080
+
+endpoints:
+  - path: /
+    service: api
+    port: 8080
